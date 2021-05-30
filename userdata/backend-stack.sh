@@ -30,6 +30,7 @@ mysql -u root -p"$DATABASE_PASS" -e "FLUSH PRIVILEGES"
 # Restart mariadb-server
 systemctl restart mariadb
 # SETUP MEMCACHE
+yum update -y
 yum install memcached -y
 systemctl start memcached
 systemctl enable memcached
@@ -38,9 +39,9 @@ memcached -p 11211 -U 11111 -u memcached -d
 sleep 30
 yum install socat -y
 yum install wget -y
-wget https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.10/rabbitmq-server-3.6.10-1.el7.noarch.rpm
+wget https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.8.16/rabbitmq-server-3.8.16-1.el8.noarch.rpm
 rpm --import https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
-yum update
+yum update -y
 rpm -Uvh rabbitmq-server-3.6.10-1.el7.noarch.rpm
 systemctl start rabbitmq-server
 systemctl enable rabbitmq-server
@@ -49,4 +50,3 @@ echo "[{rabbit, [{loopback_users, []}]}]." > /etc/rabbitmq/rabbitmq.config
 rabbitmqctl add_user test test
 rabbitmqctl set_user_tags test administrator
 systemctl restart rabbitmq-server
-
