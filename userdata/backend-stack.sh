@@ -31,18 +31,19 @@ mysql -u root -p"$DATABASE_PASS" -e "FLUSH PRIVILEGES"
 systemctl restart mariadb
 # SETUP MEMCACHE
 yum update -y
+yum install wget -y
 yum install memcached -y
 systemctl start memcached
 systemctl enable memcached
 systemctl status memcached
 memcached -p 11211 -U 11111 -u memcached -d
 sleep 30
-yum install socat -y
+yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 yum install wget -y
-wget https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.8.16/rabbitmq-server-3.8.16-1.el8.noarch.rpm
-rpm --import https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
-yum update -y
-rpm -Uvh rabbitmq-server-3.8.16-1.el8.noarch.rpm
+wget https://github.com/rabbitmq/erlang-rpm/releases/download/v24.0.1/erlang-24.0.1-1.el8.x86_64.rpm
+rpm -ivh erlang-24.0.1-1.el8.x86_64.rpm
+curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | sudo bash
+sudo yum install rabbitmq-server-3.8.16-1.el8.noarch -y
 systemctl start rabbitmq-server
 systemctl enable rabbitmq-server
 systemctl status rabbitmq-server
